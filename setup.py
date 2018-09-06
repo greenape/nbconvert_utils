@@ -11,8 +11,12 @@ except ImportError:
     from distutils.core import setup
 
 
+import versioneer
+
 setup(
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     name="nbconvert_utils",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
-    install_requires=["pandas", "tabulate", "nbconvert"],
+    install_requires=["nbconvert"],
 )

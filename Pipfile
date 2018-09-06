@@ -4,9 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tabulate = "*"
-ipython = "*"
-pandas = "*"
 nbconvert = "*"
 
 [dev-packages]
