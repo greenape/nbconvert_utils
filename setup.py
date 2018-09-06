@@ -12,11 +12,7 @@ except ImportError:
 
 
 setup(
-    name="pandas_to_markdown",
+    name="nbconvert_utils",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
-    install_requires=[
-        "pandas",
-        "tabulate",
-        "nbconvert"
-    ],
+    install_requires=["pandas", "tabulate", "nbconvert"],
 )
