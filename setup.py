@@ -19,4 +19,5 @@ setup(
     name="nbconvert_utils",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
     install_requires=["nbconvert"],
+    python_requires=">3.6.0",
 )

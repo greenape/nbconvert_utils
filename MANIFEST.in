@@ -1,2 +1,3 @@
 include versioneer.py
 include nbconvert_utils/_version.py
+include LICENSE
