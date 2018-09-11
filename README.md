@@ -8,6 +8,6 @@ Provides two nbconvert preprocessors: `ExecuteWithPreamble`, and `ExecuteWithIPy
 
 ## Usage
 
-`jupyter nbconvert --to markdown --Exporter.preprocessors=[\"nb_utils.ExecuteWithPreamble\"] --ExecuteWithPreamble.preamble_scripts=[\"../../some_script.py\"] *.ipynb`
+`jupyter nbconvert --to markdown --ExecuteWithPreamble.enable=True --ExecuteWithPreamble.preamble_scripts=[\"../../some_script.py\"] *.ipynb`
 
-`jupyter nbconvert --to markdown --Exporter.preprocessors=[\"nb_utils.ExecuteWithPreamble\"] --ExecuteWithIPython.extra_arguments=[\"--profile-dir=/custom/ipython/profile/default\"] *.ipynb`
+`jupyter nbconvert --to markdown --ExecuteWithIPythonArgs.enable=True --ExecuteWithIPythonArgs.extra_arguments=[\"--profile-dir=/custom/ipython/profile/default\"] *.ipynb`
