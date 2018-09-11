@@ -41,8 +41,6 @@ class ExecuteWithPreamble(ExecutePreprocessor):
         resources : dictionary
             Additional resources used in the conversion process.
         """
-        self.log.info(self.__dict__)
-        self.log.info(nb.cells[0])
         for script in self.preamble_scripts:
             self.log.info(f"Injecting preamble script {script}")
             nb.cells.insert(
