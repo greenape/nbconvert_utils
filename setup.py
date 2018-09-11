@@ -12,7 +12,9 @@ import versioneer
 from setuptools.command.install import install
 from setuptools.command.develop import develop
 import sys
+import nbconvert
 from pathlib import Path
+
 
 
 class CustomDevelopCommand(develop):
@@ -21,18 +23,22 @@ class CustomDevelopCommand(develop):
         develop.run(self)
         python_path = Path(sys.executable).absolute().parent / "../etc/jupyter"
         python_path.mkdir(parents=True, exist_ok=True)
-        print(f"Writing nbconvert config to {python_path / "jupyter_nbconvert_config.json"}")
+        print(f"Writing nbconvert config to {python_path / 'jupyter_nbconvert_config.json'}")
         with open(python_path / "jupyter_nbconvert_config.json", "w+") as f:
         	try:
         		js = json.load(f)
         	except json.decoder.JSONDecodeError:
         		js = {}
-        	executor_config = js.get('Executor', {})
-        	existing = set(executor_config.get('preprocessors', []))
-        	existing.add("nbconvert_utils.ExecuteWithPreamble")
-        	existing.add("nbconvert_utils.ExecuteWithIPythonArgs")
-        	js['Executor'] = executor_config
-        	js['Executor']['preprocessors'] = list(existing)
+        	executor_config = js.get('Exporter', {})
+        	existing = set(executor_config.get('default_preprocessors', []))
+        	for prep in nbconvert.exporter.Exporter.default_preprocessors.default_args[0]:
+        		if prep == "nbconvert.preprocessors.ExecutePreprocessor":
+        			existing.add("nbconvert_utils.ExecuteWithPreamble")
+        			existing.add("nbconvert_utils.ExecuteWithIPythonArgs")
+        		existing.add(prep)
+
+        	js['Exporter'] = executor_config
+        	js['Exporter']['default_preprocessors'] = list(existing)
         	json.dump(js, f)
 
 class CustomInstallCommand(install):
@@ -41,18 +47,22 @@ class CustomInstallCommand(install):
         install.run(self)
         python_path = Path(sys.executable).absolute().parent / "../etc/jupyter"
         python_path.mkdir(parents=True, exist_ok=True)
-        print(f"Writing nbconvert config to {python_path / "jupyter_nbconvert_config.json"}")
+        print(f"Writing nbconvert config to {python_path / 'jupyter_nbconvert_config.json'}")
         with open(python_path / "jupyter_nbconvert_config.json", "w+") as f:
         	try:
         		js = json.load(f)
         	except json.decoder.JSONDecodeError:
         		js = {}
-        	executor_config = js.get('Executor', {})
-        	existing = set(executor_config.get('preprocessors', []))
-        	existing.add("nbconvert_utils.ExecuteWithPreamble")
-        	existing.add("nbconvert_utils.ExecuteWithIPythonArgs")
-        	js['Executor'] = executor_config
-        	js['Executor']['preprocessors'] = list(existing)
+        	executor_config = js.get('Exporter', {})
+        	existing = set(executor_config.get('default_preprocessors', []))
+        	for prep in nbconvert.exporter.Exporter.default_preprocessors.default_args[0]:
+        		if prep == "nbconvert.preprocessors.ExecutePreprocessor":
+        			existing.add("nbconvert_utils.ExecuteWithPreamble")
+        			existing.add("nbconvert_utils.ExecuteWithIPythonArgs")
+        		existing.add(prep)
+
+        	js['Exporter'] = executor_config
+        	js['Exporter']['default_preprocessors'] = list(existing)
         	json.dump(js, f)
 
 def get_cmd():
@@ -67,5 +77,6 @@ setup(
     name="nbconvert_utils",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
     install_requires=["nbconvert"],
+    setup_requires=["nbconvert"],
     python_requires=">3.6.0",
 )
