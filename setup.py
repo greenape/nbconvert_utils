@@ -30,15 +30,15 @@ class CustomDevelopCommand(develop):
         	except json.decoder.JSONDecodeError:
         		js = {}
         	executor_config = js.get('Exporter', {})
-        	existing = set(executor_config.get('default_preprocessors', []))
+        	existing = dict.fromkeys(executor_config.get('default_preprocessors', []), "")
         	for prep in nbconvert.exporter.Exporter.default_preprocessors.default_args[0]:
         		if prep == "nbconvert.preprocessors.ExecutePreprocessor":
-        			existing.add("nbconvert_utils.ExecuteWithPreamble")
-        			existing.add("nbconvert_utils.ExecuteWithIPythonArgs")
-        		existing.add(prep)
+        			existing["nbconvert_utils.ExecuteWithPreamble"] = ""
+        			existing["nbconvert_utils.ExecuteWithIPythonArgs"] = ""
+        		existing[prep] = ""
 
         	js['Exporter'] = executor_config
-        	js['Exporter']['default_preprocessors'] = list(existing)
+        	js['Exporter']['default_preprocessors'] = list(existing.keys())
         	json.dump(js, f)
 
 class CustomInstallCommand(install):
@@ -54,15 +54,15 @@ class CustomInstallCommand(install):
         	except json.decoder.JSONDecodeError:
         		js = {}
         	executor_config = js.get('Exporter', {})
-        	existing = set(executor_config.get('default_preprocessors', []))
+        	existing = dict.fromkeys(executor_config.get('default_preprocessors', []), "")
         	for prep in nbconvert.exporter.Exporter.default_preprocessors.default_args[0]:
         		if prep == "nbconvert.preprocessors.ExecutePreprocessor":
-        			existing.add("nbconvert_utils.ExecuteWithPreamble")
-        			existing.add("nbconvert_utils.ExecuteWithIPythonArgs")
-        		existing.add(prep)
+        			existing["nbconvert_utils.ExecuteWithPreamble"] = ""
+        			existing["nbconvert_utils.ExecuteWithIPythonArgs"] = ""
+        		existing[prep] = ""
 
         	js['Exporter'] = executor_config
-        	js['Exporter']['default_preprocessors'] = list(existing)
+        	js['Exporter']['default_preprocessors'] = list(existing.keys())
         	json.dump(js, f)
 
 def get_cmd():
