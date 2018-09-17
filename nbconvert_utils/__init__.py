@@ -42,19 +42,20 @@ class ExecuteWithPreamble(ExecutePreprocessor):
             Additional resources used in the conversion process.
         """
         for script in self.preamble_scripts:
-            self.log.info(f"Injecting preamble script {script}")
-            nb.cells.insert(
-                0,
-                nbformat.from_dict(
-                    {
-                        "cell_type": "code",
-                        "execution_count": 0,
-                        "metadata": {"collapsed": True},
-                        "outputs": [],
-                        "source": f"%run {script}",
-                    }
-                ),
-            )
+            with open(script) as fin:
+                self.log.info(f"Injecting preamble script {script}")
+                nb.cells.insert(
+                    0,
+                    nbformat.from_dict(
+                        {
+                            "cell_type": "code",
+                            "execution_count": 0,
+                            "metadata": {"collapsed": True},
+                            "outputs": [],
+                            "source": fin.read(),
+                        }
+                    ),
+                )
         nb, resources = super().preprocess(nb, resources)
         self.log.info(f"Removing first {len(self.preamble_scripts)} cells")
         nb.cells = nb.cells[len(self.preamble_scripts) :]
@@ -71,7 +72,6 @@ class ExecuteWithIPythonArgs(ExecutePreprocessor):
             """
         ),
     )
-
 
 from ._version import get_versions
 
